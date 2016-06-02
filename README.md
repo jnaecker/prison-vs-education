@@ -1,5 +1,7 @@
 ## Readme
 
+Code and data for [this blog post](http://jeffnaecker.com/blog/prison-vs-education).
+
 ### Data sources
 
 Pupil spending data from [the U.S. Census](https://www.census.gov/content/dam/Census/library/publications/2015/econ/g13-aspef.pdf) (see table 8).  Data is from 2013.
