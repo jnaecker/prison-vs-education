@@ -1,4 +1,10 @@
 
+---
+title: "Prison spending vs education spending by state"
+author: Jeff Naecker
+date: June 2, 2016
+output: html_document
+---
 
 
 ```{r setup, echo=FALSE, message=FALSE}
@@ -6,32 +12,37 @@ library(ggplot2)
 library(plotly)
 library(htmlwidgets)
 library(knitr)
-
-opts_knit$set(echo=F, message=F)
 ```
 
 
-```{r clean-data}
+```{r clean-data, echo=FALSE, message=FALSE}
 data <- read.csv("data.csv", stringsAsFactors=F)
 data$ratio <- data$per.prisoner.cost/data$per.pupil.spending
 ```
 
-```{r make-plot}
+```{r make-plot, echo=FALSE, message=FALSE}
 p <- plot_ly(data,
         x = per.prisoner.cost, 
         y = per.pupil.spending, 
-        text = state,
+        text = paste(state, round(ratio, 2), sep=": "),
         mode = "markers", 
+        showlegend=F,
         color = ratio) %>%
         layout(
-          xaxis = list(range = c(0, 60000)),
-          yaxis = list(range = c(0, 20000))) %>%
-      add_trace(x = c(0, 20000), y= c(0, 20000), mode = "lines", color = 1) %>%
-      add_trace(x = c(0, 40000), y= c(0, 20000), mode = "lines", color = 1) %>%
-      add_trace(x = c(0, 60000), y= c(0, 20000), mode = "lines", color = 1) %>%
-      add_trace(x = c(0, 60000), y= c(0, 15000), mode = "lines", color = 1)
+          xaxis = list(range = c(0, 62000), title="Spending Per Prisoner"),
+          yaxis = list(range = c(0, 20000), title="Spending Per Student (K-12)")) %>%
+      add_trace(x = c(0, 20000), y= c(0, 20000), mode = "lines", line = list(dash = "5px", color = "#737373"), showlegend = F) %>%
+      add_trace(x = c(0, 40000), y= c(0, 20000), mode = "lines", line = list(dash = "5px", color = "#737373"), showlegend = F) %>%
+      add_trace(x = c(0, 60000), y= c(0, 20000), mode = "lines", line = list(dash = "5px", color = "#737373"), showlegend = F) %>%
+      add_trace(x = c(0, 60000), y= c(0, 15000), mode = "lines", line = list(dash = "5px", color = "#737373"), showlegend = F) %>%
+      layout(autosize = F, width = 1000, height = 400)
+
+plotly_POST(p, filename="prison-vs-education", fileopt="overwrite", sharing="public")
 
 p
 ```
+
+
+
 
 
