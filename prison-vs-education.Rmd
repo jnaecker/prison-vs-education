@@ -7,20 +7,21 @@ output: html_document
 ---
 
 
-```{r setup, echo=FALSE, message=FALSE}
+```{r setup}
 library(ggplot2)
 library(plotly)
 library(htmlwidgets)
 library(knitr)
+library(xtable)
 ```
 
 
-```{r clean-data, echo=FALSE, message=FALSE}
+```{r clean-data}
 data <- read.csv("data.csv", stringsAsFactors=F)
 data$ratio <- data$per.prisoner.cost/data$per.pupil.spending
 ```
 
-```{r make-plot, echo=FALSE, message=FALSE}
+```{r make-plot}
 p <- plot_ly(data,
         x = per.prisoner.cost, 
         y = per.pupil.spending, 
@@ -34,15 +35,22 @@ p <- plot_ly(data,
       add_trace(x = c(0, 20000), y= c(0, 20000), mode = "lines", line = list(dash = "5px", color = "#737373"), showlegend = F) %>%
       add_trace(x = c(0, 40000), y= c(0, 20000), mode = "lines", line = list(dash = "5px", color = "#737373"), showlegend = F) %>%
       add_trace(x = c(0, 60000), y= c(0, 20000), mode = "lines", line = list(dash = "5px", color = "#737373"), showlegend = F) %>%
-      add_trace(x = c(0, 60000), y= c(0, 15000), mode = "lines", line = list(dash = "5px", color = "#737373"), showlegend = F) %>%
-      layout(autosize = F, width = 1000, height = 400)
-
-plotly_POST(p, filename="prison-vs-education", fileopt="overwrite", sharing="public")
+      add_trace(x = c(0, 60000), y= c(0, 15000), mode = "lines", line = list(dash = "5px", color = "#737373"), showlegend = F) 
 
 p
 ```
 
 
+```{r print-table, results='asis'}
+print(
+  xtable(
+    data,
+    digits = 0
+    ), type="html"
+  )
+```
 
 
-
+```{r post-plot, message=F}
+plotly_POST(p, filename="prison-vs-education", fileopt="overwrite", sharing="public")
+```
